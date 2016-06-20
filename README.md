@@ -1,32 +1,58 @@
-# event-data-wikipedia-agent
+# Event Data Wikipedia Agent
 
-FIXME: description
+Event Data for polling Wikipedia articles and extracting DOI citations that are added and removed.
 
-## Installation
+Follows the [Baleen](https://github.com/crossref/baleen) framework, therefore requires:
 
-Download from http://example.com/FIXME.
+ - the "DOI Destinations" API.
+ - a Redis instance.
+ - a Lagotto instance.
+ - Amazon S3.
 
-## Usage
+Required config keys:
 
-FIXME: explanation
+    :doi-desinations-base-url
+    :archive-s3-bucket
+    :s3-access-key-id
+    :s3-secret-access-key
+    :redis-host
+    :redis-port
+    :redis-db-number
+    :monitor-port
+    :lagotto-api-base-url
+    :lagotto-source-token
+    :lagotto-auth-token
+    :recent-changes-subscribe-filter
 
-    $ java -jar event-data-wikipedia-agent-0.1.0-standalone.jar [args]
 
-## Options
+## To run
 
-FIXME: listing of options this app accepts.
+Several processes need to be run:
 
-## Examples
+### Ingester
 
-...
+Read live stream from Wikipedia.
 
-### Bugs
+    lein with-profile prod run ingest
 
-...
+### Processor
 
-### Any Other Sections
-### That You Think
-### Might be Useful
+Process diffs to extract events. Run two or more of these.
+
+    lein with-profile prod run process
+
+### Pusher
+
+Push events to Lagotto
+
+    lein with-profile prod run push
+
+### Monitor
+
+Monitor data throughput, serve status page.
+
+    lein with-profile prod run monitor
+
 
 ## License
 
