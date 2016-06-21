@@ -4,7 +4,8 @@
             [event-data-wikipedia-agent.process :as process]
             [event-data-wikipedia-agent.monitor :as monitor]
             [event-data-wikipedia-agent.push :as push])
-  (:require [baleen.context :as baleen])
+  (:require [baleen.context :as baleen]
+            [baleen.monitor :as baleen-monitor])
   (:gen-class))
 
 (def config
@@ -13,6 +14,7 @@
 
 (defn main-ingest [context]
   (l/info "Ingest")
+  (baleen-monitor/register-heartbeat context "ingest")
   (ingest/run context))
 
 ; NB bear in mind the contention for the Jedis pool.
@@ -21,6 +23,7 @@
 
 (defn main-process [context]
   (l/info "Process")
+  (baleen-monitor/register-heartbeat context "process")
 
   (let [threads (map (fn [_] (Thread. (fn [] (process/run context))))
                              (range 0 num-threads))]
@@ -36,17 +39,17 @@
 
 (defn main-push [context]
   (l/info "Push")
+  (baleen-monitor/register-heartbeat context "push")
   (push/run context))
 
-(defn main-serve [context]
-  (l/info "Serve"))
-
 (defn main-archive [context]
+  ; TODO
   (l/info "Archive"))
 
 (defn main-monitor [context]
   (l/info "Monitor")
-  (monitor/run context))
+  (baleen-monitor/register-heartbeat context "monitor")
+  (baleen-monitor/run context))
 
 (defn main-unrecognised-action
   [command]
@@ -68,7 +71,6 @@
       "ingest" (main-ingest context)
       "process" (main-process context)
       "push" (main-push context)
-      "serve" (main-serve context)
       "archive" (main-archive context)
       "monitor" (main-monitor context)
       (main-unrecognised-action command))))

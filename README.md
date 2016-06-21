@@ -11,7 +11,7 @@ Follows the [Baleen](https://github.com/crossref/baleen) framework, therefore re
 
 Required config keys:
 
-    :doi-desinations-base-url
+    :doi-destinations-base-url
     :archive-s3-bucket
     :s3-access-key-id
     :s3-secret-access-key
