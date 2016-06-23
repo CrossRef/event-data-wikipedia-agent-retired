@@ -64,8 +64,7 @@
 
         command (first args)]
 
-    (when-not (baleen/boot! context)
-      (System/exit 1))
+    (baleen/boot! context)
 
     (condp = command
       "ingest" (main-ingest context)

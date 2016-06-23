@@ -7,8 +7,7 @@
   (:require [clojure.data.json :as json]
             [clojure.tools.logging :as l]
             [clojure.set :refer [difference]])
-  (:require [org.httpkit.client :as http]
-            [clj-time.coerce :as clj-time-coerce]))
+  (:require [clj-time.coerce :as clj-time-coerce]))
 
 (defn process-f [context json-blob]
   (let [item-parsed (json/read-str json-blob)
