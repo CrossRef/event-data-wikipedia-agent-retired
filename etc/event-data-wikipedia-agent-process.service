@@ -1,6 +1,6 @@
 [Unit]
 Description=CED Wikipedia Agent - Process
-After=redis-server
+After=redis-server.service
 
 [Service]
 Type=simple

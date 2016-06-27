@@ -1,6 +1,6 @@
 [Unit]
 Description=CED Wikipedia Agent - Monitor
-After=redis-server
+After=redis-server.service
 
 [Service]
 Type=simple
@@ -13,4 +13,3 @@ User=deploy
 
 [Install]
 WantedBy=multi-user.target
-Í
