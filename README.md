@@ -53,6 +53,15 @@ Monitor data throughput, serve status page.
 
     lein with-profile prod run monitor
 
+## Install on production
+
+`lein uberjar` to compile. Systemd scripts in `etc`:
+
+ - `event-data-wikipedia-agent-ingest.service`
+ - `event-data-wikipedia-agent-monitor.service`
+ - `event-data-wikipedia-agent-process.service`
+ - `event-data-wikipedia-agent-push.service`
+
 
 ## License
 
