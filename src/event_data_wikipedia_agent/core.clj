@@ -5,7 +5,8 @@
             [event-data-wikipedia-agent.monitor :as monitor]
             [event-data-wikipedia-agent.push :as push])
   (:require [baleen.context :as baleen]
-            [baleen.monitor :as baleen-monitor])
+            [baleen.monitor :as baleen-monitor]
+            [baleen.stash :as baleen-stash])
   (:gen-class))
 
 (def config
@@ -42,9 +43,18 @@
   (baleen-monitor/register-heartbeat context "push")
   (push/run context))
 
-(defn main-archive [context]
-  ; TODO
-  (l/info "Archive"))
+(defn run-daily
+  "Run daily tasks. Stashing logs.
+  This will run the last 30 days' worth of daily tasks if they haven't been done.
+  Wikipedia the signal-noise-ratio is so low that we don't store the puts or unmatched."
+  
+  [context]
+  (let [ymd-range (baleen-time/last-n-days-ymd 30 :yesterday)]
+    (l/info "Checking " (count ymd-range) "past days")
+    (doseq [date-str ymd-range]
+      (l/info "Check " date-str)
+      (baleen-stash/stash-jsonapi-redis-list context (str "reddit-matched-" date-str) (str "logs/" date-str "/matched.json") "reddit-match"  false)
+      (baleen-stash/stash-jsonapi-redis-list context (str "reddit-unmatched-log-" date-str) (str "logs/" date-str "/unmatched.json") "reddit-match"  false))))
 
 (defn main-monitor [context]
   (l/info "Monitor")
@@ -70,6 +80,6 @@
       "ingest" (main-ingest context)
       "process" (main-process context)
       "push" (main-push context)
-      "archive" (main-archive context)
+      "daily" (run-daily context)
       "monitor" (main-monitor context)
       (main-unrecognised-action command))))
