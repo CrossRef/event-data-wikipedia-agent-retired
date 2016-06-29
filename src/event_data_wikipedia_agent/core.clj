@@ -6,7 +6,8 @@
             [event-data-wikipedia-agent.push :as push])
   (:require [baleen.context :as baleen]
             [baleen.monitor :as baleen-monitor]
-            [baleen.stash :as baleen-stash])
+            [baleen.stash :as baleen-stash]
+            [baleen.time :as baleen-time])
   (:gen-class))
 
 (def config
@@ -47,7 +48,7 @@
   "Run daily tasks. Stashing logs.
   This will run the last 30 days' worth of daily tasks if they haven't been done.
   Wikipedia the signal-noise-ratio is so low that we don't store the puts or unmatched."
-  
+
   [context]
   (let [ymd-range (baleen-time/last-n-days-ymd 30 :yesterday)]
     (l/info "Checking " (count ymd-range) "past days")
