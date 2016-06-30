@@ -10,7 +10,7 @@
   (:require [org.httpkit.client :as http]
             [clj-time.coerce :as clj-time-coerce])
   (:import [java.net URLEncoder])
-  )
+  (:require [robert.bruce :refer [try-try-again]]))
 
 
 (defn build-restbase-url
@@ -54,8 +54,8 @@
         old-restbase-url (build-restbase-url server-name title old-revision)
         new-restbase-url (build-restbase-url server-name title new-revision)
         
-        {old-status :status old-body :body} @(http/get old-restbase-url)
-        {new-status :status new-body :body} @(http/get new-restbase-url)
+        {old-status :status old-body :body} (try-try-again {:tries 10 :delay 1000} (fn [] @(http/get old-restbase-url))) 
+        {new-status :status new-body :body} (try-try-again {:tries 10 :delay 1000} (fn [] @(http/get new-restbase-url)))
 
         timestamp (clj-time-coerce/from-long (* 1000 (get data "timestamp")))
 

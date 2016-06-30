@@ -8,7 +8,8 @@
            [org.slf4j/slf4j-simple "1.7.21"]
                   [org.clojure/data.json "0.2.6"]
                   [gottox/socketio "0.1"]
-                  [crossref/baleen "0.1"]]
+                  [crossref/baleen "0.1"]
+                  [robert/bruce "0.8.0"]]
   :plugins [[lein-localrepo "0.5.3"]]
   :java-source-paths ["src-java"]
   :main ^:skip-aot event-data-wikipedia-agent.core
