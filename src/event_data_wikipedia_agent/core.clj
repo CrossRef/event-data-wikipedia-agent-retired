@@ -54,7 +54,7 @@
     (l/info "Checking " (count ymd-range) "past days")
     (doseq [date-str ymd-range]
       (l/info "Check " date-str)
-      (baleen-stash/stash-jsonapi-redis-list context (str "matched-" date-str) (str "logs/" date-str "/matched.json") "wikipedia-match"  false))))
+      (baleen-stash/stash-jsonapi-redis-list context (str "matched-" date-str) (str "evidence/collected/" date-str " /sources/wikipedia/matched.json") "wikipedia-match"  false))))
 
 (defn main-monitor [context]
   (l/info "Monitor")
